@@ -20,6 +20,13 @@ def ago_string(time)
   time.ago_in_words.gsub(/ and \w+ \w+/, '')
 end
 
+def most_recent_location(status)
+  status.map {|_,v| [v['created_at'], v['location']] if v['location']}.
+    compact.
+    sort_by(&:first).
+    last.last
+end
+
 status = JSON.parse(open(ENV['STATUS_URL']).read)
 status.delete('metadata')
 
@@ -41,7 +48,10 @@ status['tweet'] = TwitterCollector.collect(ENV['USERNAME'], *twitter_credentials
 
 status = Hash[status.map { |k, v| [k, v.merge('created_ago' => ago_string(v['created_at']))] }]
 
-status['metadata'] = { created_at: Time.new.utc }
+status['metadata'] = {
+  created_at: Time.new.utc,
+  most_recent_location: most_recent_location(status)
+}
 
 client = AwsClient.new(ENV['AWS_KEY'], ENV['AWS_SECRET'], ENV['AWS_REGION'])
 client.post(ENV['AWS_BUCKET'], 'status.json', status.to_json)
