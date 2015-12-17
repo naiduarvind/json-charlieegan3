@@ -1,6 +1,6 @@
 class TwitterCollector
-  def self.collect(username, credentials)
-    client = initialize_client(credentials)
+  def self.collect(username, key, secret, token_key, token_secret)
+    client = initialize_client(key, secret, token_key, token_secret)
 
     tweet = client.user_timeline(username).reject do |t|
       t.reply? || t.retweet? || t.media? || t.uris? || t.user_mentions?
@@ -15,12 +15,12 @@ class TwitterCollector
 
   private
 
-  def self.initialize_client(credentials)
+  def self.initialize_client(key, secret, token_key, token_secret)
     Twitter::REST::Client.new do |config|
-      config.consumer_key        = credentials[:key]
-      config.consumer_secret     = credentials[:secret]
-      config.access_token        = credentials[:token_key]
-      config.access_token_secret = credentials[:token_secret]
+      config.consumer_key        = key
+      config.consumer_secret     = secret
+      config.access_token        = token_key
+      config.access_token_secret = token_secret
     end
   end
 end
