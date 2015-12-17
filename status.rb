@@ -14,6 +14,7 @@ require './collectors/twitter_collector'
 require './collectors/strava_collector'
 require './collectors/lastfm_collector'
 require './collectors/instagram_collector'
+require './aws_client'
 
 def ago_string(time)
   time.ago_in_words.gsub(/ and \w+ \w+/, '')
@@ -46,12 +47,5 @@ end
 
 status['metadata'] = { created_at: Time.new.utc }
 
-Aws.config.update({
-  region: ENV['AWS_REGION'],
-  credentials: Aws::Credentials.new(ENV['AWS_KEY'], ENV['AWS_SECRET'])
-})
-bucket = Aws::S3::Resource.new.bucket(ENV['AWS_BUCKET'])
-
-path = 'status.json'
-obj = bucket.object(path)
-obj.put(body: status.to_json, acl: 'public-read')
+client = AwsClient.new(ENV['AWS_KEY'], ENV['AWS_SECRET'], ENV['AWS_REGION'])
+client.post(ENV['AWS_BUCKET'], 'status.json', status.to_json)
