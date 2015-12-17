@@ -7,3 +7,5 @@ gem 'strava-api-v3'
 gem 'twitter'
 
 gem 'time_ago_in_words'
+
+gem 'pry'
