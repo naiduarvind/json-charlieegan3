@@ -27,12 +27,10 @@ twitter_credentials = [
   ENV['TWITTER_KEY'], ENV['TWITTER_SECRET'], ENV['TWITTER_ACCESS_TOKEN_KEY'],
   ENV['TWITTER_ACCESS_TOKEN_SECRET']
 ]
-
 instagram_credentials = [
   ENV['INSTAGRAM_CLIENT_ID'], ENV['INSTAGRAM_CLIENT_SECRET'],
   ENV['INSTAGRAM_ACCESS_TOKEN']
 ]
-
 lastfm_credentials = [ENV['LASTFM_KEY'], ENV['LASTFM_SECRET'], ENV['USERNAME']]
 
 status['activity'] = StravaCollector.collect(ENV['STRAVA_TOKEN'])
@@ -41,9 +39,7 @@ status['image'] = InstagramCollector.collect(*instagram_credentials)
 status['track'] = LastfmCollector.collect(*lastfm_credentials)
 status['tweet'] = TwitterCollector.collect(ENV['USERNAME'], *twitter_credentials)
 
-status.each do |k,_|
-  status[k].merge!('created_ago' => ago_string(status[k]['created_at']))
-end
+status = Hash[status.map { |k, v| [k, v.merge('created_ago' => ago_string(v['created_at']))] }]
 
 status['metadata'] = { created_at: Time.new.utc }
 
