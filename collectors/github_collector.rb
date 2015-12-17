@@ -25,7 +25,7 @@ class GitHubCollector
   def self.format_commit(commit)
     commit.select! { |k,_| %w(message url created_at).include? k }
     commit = set_link(commit)
-    commit['created_at'] = Time.parse(commit['created_at'])
+    commit['created_at'] = Time.parse(commit['created_at']).utc
     return commit
   end
 

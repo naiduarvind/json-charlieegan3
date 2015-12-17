@@ -7,9 +7,9 @@ class TwitterCollector
     end.first
 
     {
-      text: tweet.text,
-      location: tweet.place.full_name,
-      created_at: Time.parse(tweet.created_at.to_s).utc
+      'text' => tweet.text,
+      'location' => tweet.place.full_name,
+      'created_at' => Time.parse(tweet.created_at.to_s).utc
     }
   end
 
