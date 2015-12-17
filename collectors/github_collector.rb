@@ -12,7 +12,7 @@ class GitHubCollector
   end
 
   def self.filter_feed_for_suitable_commits(feed)
-    feed.select! { |e| e['type'] = 'PushEvent' }
+    feed.select! { |e| e['type'] == 'PushEvent' && e['payload']['commits']}
     feed.map! do |e|
       e['payload']['commits'].map do |c|
         c.merge!('created_at' => e["created_at"])
