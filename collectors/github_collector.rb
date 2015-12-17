@@ -26,6 +26,7 @@ class GitHubCollector
     commit.select! { |k,_| %w(message url created_at).include? k }
     commit['url'].gsub!(/api\.|repos\//, '')
     commit['url'].gsub!('commits', 'commit')
+    commit['created_at'] = Time.parse(commit['created_at'])
     return commit
   end
 end

@@ -7,7 +7,7 @@ class LastfmCollector
       artist: track.artist,
       link: track.url,
       images: track.images,
-      created_at: track.date
+      created_at: track.date.utc
     }
   end
 end
