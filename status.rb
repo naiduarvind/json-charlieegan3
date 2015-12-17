@@ -14,6 +14,8 @@ require './collectors/strava_collector'
 require './collectors/lastfm_collector'
 require './collectors/instagram_collector'
 
+status = JSON.parse(open(ENV['STATUS_URL']).read)
+
 twitter_credentials = {
   key: ENV['TWITTER_KEY'],
   secret: ENV['TWITTER_SECRET'],
@@ -21,15 +23,14 @@ twitter_credentials = {
   token_secret: ENV['TWITTER_ACCESS_TOKEN_SECRET']
 }
 
-data = {
-  activity: StravaCollector.collect(ENV['STRAVA_TOKEN']),
-  commit: GitHubCollector.collect(ENV['USERNAME']),
-  image: InstagramCollector.collect(ENV['INSTAGRAM_CLIENT_ID'], ENV['INSTAGRAM_CLIENT_SECRET'], ENV['INSTAGRAM_ACCESS_TOKEN']),
-  track: LastfmCollector.collect(ENV['LASTFM_KEY'], ENV['LASTFM_SECRET'], ENV['USERNAME']),
-  tweet: TwitterCollector.collect(ENV['USERNAME'], twitter_credentials)
-}
+status['activity'] = StravaCollector.collect(ENV['STRAVA_TOKEN'])
+status['commit'] = GitHubCollector.collect(ENV['USERNAME'])
+status['image'] = InstagramCollector.collect(ENV['INSTAGRAM_CLIENT_ID'], ENV['INSTAGRAM_CLIENT_SECRET'], ENV['INSTAGRAM_ACCESS_TOKEN'])
+status['track'] = LastfmCollector.collect(ENV['LASTFM_KEY'], ENV['LASTFM_SECRET'], ENV['USERNAME'])
+status['tweet'] = TwitterCollector.collect(ENV['USERNAME'], twitter_credentials)
 
-data.merge!({ metadata: { collected_date: Time.new } })
+status['metadata'] = { collected_date: Time.new.utc }
+
 
 Aws.config.update({
   region: ENV['AWS_REGION'],
@@ -39,4 +40,4 @@ bucket = Aws::S3::Resource.new.bucket(ENV['AWS_BUCKET'])
 
 path = 'status.json'
 obj = bucket.object(path)
-obj.put(body: data.to_json, acl: 'public-read')
+obj.put(body: status.to_json, acl: 'public-read')
