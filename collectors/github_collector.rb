@@ -24,9 +24,16 @@ class GitHubCollector
 
   def self.format_commit(commit)
     commit.select! { |k,_| %w(message url created_at).include? k }
+    commit = set_link(commit)
+    commit['created_at'] = Time.parse(commit['created_at'])
+    return commit
+  end
+
+  def self.set_link(commit)
     commit['url'].gsub!(/api\.|repos\//, '')
     commit['url'].gsub!('commits', 'commit')
-    commit['created_at'] = Time.parse(commit['created_at'])
+    commit['link'] = commit['url']
+    commit.delete('url')
     return commit
   end
 end
