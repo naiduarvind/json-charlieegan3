@@ -3,7 +3,7 @@ class StravaCollector
     client = Strava::Api::V3::Client.new(access_token: token)
 
     keys = %w(id name distance moving_time location_city start_date)
-    activity = client.list_athlete_activities.first.select do |key,_|
+    activity = client.list_athlete_activities.first.select do |key, _|
       keys.include? key
     end
 
@@ -13,6 +13,12 @@ class StravaCollector
     activity.delete('location_city')
     activity['link'] = "https://www.strava.com/activities/#{activity['id']}"
     activity.delete('id')
+
+    activity['distance'] = (activity['distance'] / 1000).round(1)
+
+    time = activity['moving_time'] / 60.0
+    mins = time.to_i
+    activity['moving_time'] = "#{mins} minutes #{((time - mins) * 60).to_i} seconds"
 
     return activity
   end
