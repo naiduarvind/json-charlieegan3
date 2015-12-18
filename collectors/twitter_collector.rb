@@ -9,6 +9,7 @@ class TwitterCollector
     {
       'text' => tweet.text,
       'location' => tweet.place.full_name,
+      'link' => tweet.url.to_s,
       'created_at' => Time.parse(tweet.created_at.to_s).utc
     }
   end
