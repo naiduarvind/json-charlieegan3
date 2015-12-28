@@ -26,6 +26,7 @@ class GitHubCollector
     commit.select! { |k,_| %w(message url created_at).include? k }
     commit = set_link(commit)
     commit['created_at'] = Time.parse(commit['created_at']).utc
+    commit['message'] = commit['message'].split("\n").first
     return commit
   end
 
