@@ -7,6 +7,7 @@ require 'instagram'
 require 'rockstar'
 require 'strava/api/v3'
 require 'twitter'
+require 'nokogiri'
 require 'time_ago_in_words'
 
 require './collectors/github_collector'
@@ -14,6 +15,7 @@ require './collectors/twitter_collector'
 require './collectors/strava_collector'
 require './collectors/lastfm_collector'
 require './collectors/instagram_collector'
+require './collectors/game_collector'
 require './aws_client'
 
 def ago_string(time)
@@ -21,7 +23,7 @@ def ago_string(time)
 end
 
 def most_recent_location(status)
-  status.map {|_,v| [v['created_at'], v['location']] if v['location']}.
+  status.map { |_,v| [v['created_at'], v['location']] if !(v.class == Array) && v['location'] }.
     compact.
     sort_by(&:first).
     last.last
@@ -45,8 +47,12 @@ status['commit'] = GitHubCollector.collect(ENV['USERNAME'])
 status['image'] = InstagramCollector.collect(*instagram_credentials)
 status['track'] = LastfmCollector.collect(*lastfm_credentials)
 status['tweet'] = TwitterCollector.collect(ENV['USERNAME'], *twitter_credentials)
+status['games'] = GameCollector.collect(ENV['STEAM_USER'], ENV['PSN_USER'], ENV['SC2_URL'])
 
-status = Hash[status.map { |k, v| [k, v.merge('created_ago' => ago_string(v['created_at']))] }]
+status = Hash[status.map { |k, v|
+  (v.class == Array) ? [k, v] : [k, v.merge('created_ago' => ago_string(v['created_at']))]
+}]
+
 
 status['metadata'] = {
   created_at: Time.new.utc,
