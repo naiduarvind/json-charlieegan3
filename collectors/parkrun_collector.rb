@@ -1,4 +1,3 @@
-require 'pry'
 class ParkrunCollector
   def self.collect(barcode)
     # only check 1x per week
@@ -10,7 +9,7 @@ class ParkrunCollector
 
     link = latest_row.children.first.css("a").last
     {
-      "location" => link.text.strip.scan(/^\w+/).first,
+      "location" => link.text.strip,
       "link" => link["href"],
       "time" => latest_row.children[4].text,
       "created_at" => Time.strptime(latest_row.children[1].text, '%d/%m/%Y'),
