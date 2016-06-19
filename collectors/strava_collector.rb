@@ -20,6 +20,10 @@ class StravaCollector
     mins = time.to_i
     activity['moving_time'] = "#{mins} minutes #{((time - mins) * 60).to_i} seconds"
 
+    id = client.retrieve_current_athlete["id"]
+    activity['ytd'] =
+      client.totals_and_stats(id)["ytd_run_totals"]["distance"] / 1000
+
     return activity
   end
 end
