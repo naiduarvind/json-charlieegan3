@@ -16,6 +16,7 @@ require './collectors/strava_collector'
 require './collectors/lastfm_collector'
 require './collectors/instagram_collector'
 require './collectors/game_collector'
+require './collectors/parkrun_collector'
 require './aws_client'
 
 def ago_string(time)
@@ -30,6 +31,9 @@ def most_recent_location(status)
 end
 
 status = JSON.parse(open(ENV['STATUS_URL']).read)
+status = Hash[status.map { |k, v|
+  (v.class == Array) ? [k, v] : [k, v.merge('created_at' => Time.parse(v['created_at']))]
+}]
 status.delete('metadata')
 
 twitter_credentials = [
@@ -48,11 +52,11 @@ status['image'] = InstagramCollector.collect(*instagram_credentials)
 status['track'] = LastfmCollector.collect(*lastfm_credentials)
 status['tweet'] = TwitterCollector.collect(ENV['USERNAME'], *twitter_credentials)
 status['games'] = GameCollector.collect(ENV['STEAM_USER'], ENV['PSN_USER'], ENV['SC2_URL'])
+status['parkrun'] = (parkrun_data = ParkrunCollector.collect(ENV['PARKRUN_BARCODE'])) ? parkrun_data : status['parkrun']
 
 status = Hash[status.map { |k, v|
   (v.class == Array) ? [k, v] : [k, v.merge('created_ago' => ago_string(v['created_at']))]
 }]
-
 
 status['metadata'] = {
   created_at: Time.new.utc,
