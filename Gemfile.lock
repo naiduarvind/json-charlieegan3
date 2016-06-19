@@ -68,6 +68,8 @@ GEM
       hpricot (>= 0.4.86)
       i18n (>= 0.5.0)
       rake (>= 0.10.0)
+    rollbar (2.11.5)
+      multi_json
     simple_oauth (0.3.1)
     slop (3.6.0)
     strava-api-v3 (0.1.0)
@@ -101,6 +103,7 @@ DEPENDENCIES
   nokogiri
   pry
   rockstar
+  rollbar
   strava-api-v3
   time_ago_in_words
   twitter
