@@ -1,6 +1,3 @@
-require 'pry'
-require 'time_ago_in_words'
-
 class GameCollector
   def self.collect(steam_username, psn_username, sc2_url)
     [
