@@ -19,6 +19,7 @@ require './collectors/instagram_collector'
 require './collectors/game_collector'
 require './collectors/parkrun_collector'
 require './collectors/hn_collector'
+require './collectors/letterboxd_collector'
 
 require './aws_client'
 
@@ -62,6 +63,7 @@ begin
   status['games'] = GameCollector.collect(ENV['STEAM_USER'], ENV['PSN_USER'], ENV['SC2_URL'])
   status['parkrun'] = (parkrun_data = ParkrunCollector.collect(ENV['PARKRUN_BARCODE'])) ? parkrun_data : status['parkrun']
   status['hacker_news'] = HackerNewsCollector.collect(ENV['HACKER_NEWS_ID'])
+  status['film'] = LetterboxdCollector.collect(ENV['LETTERBOXD_USERNAME'])
 
   status = Hash[status.map { |k, v|
     (v.class == Hash && v['created_at']) ? [k, v.merge('created_ago' => ago_string(v['created_at']))] : [k, v]
