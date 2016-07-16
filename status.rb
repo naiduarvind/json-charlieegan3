@@ -80,5 +80,3 @@ rescue Exception => e
   Rollbar.error(e)
   raise e
 end
-
-Rollbar.info("Updated status successfully.")
