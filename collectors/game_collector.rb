@@ -4,12 +4,14 @@ class GameCollector
       psn_latest(psn_username),
       steam_latest(steam_username),
       sc2_latest(sc2_url),
-    ]
+    ].compact
   end
 
   def self.steam_latest(steam_username)
     doc = Nokogiri::HTML(open("https://steamcommunity.com/id/#{steam_username}"))
-    date_string = doc.css('.game_info_details').first.children.last.text.strip
+    date = doc.css('.game_info_details').first
+    return unless date
+    date_string = date.children.last.text.strip
     {
       network_icon: "https://steamcommunity.com/favicon.ico",
       action: "https://steamcommunity.com/id/#{steam_username}",

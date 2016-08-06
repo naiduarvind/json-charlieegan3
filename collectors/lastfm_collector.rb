@@ -2,6 +2,7 @@ class LastfmCollector
   def self.collect(key, secret, username)
     Rockstar.lastfm = { api_key: key, api_secret:  secret }
     track = Rockstar::User.new(username).recent_tracks.first
+    return unless track
     {
       'name' => track.name,
       'artist' => track.artist,

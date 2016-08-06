@@ -58,7 +58,7 @@ begin
   status['activity'] = StravaCollector.collect(ENV['STRAVA_TOKEN'])
   status['commit'] = GitHubCollector.collect(ENV['USERNAME'])
   status['image'] = InstagramCollector.collect(*instagram_credentials)
-  status['track'] = LastfmCollector.collect(*lastfm_credentials)
+  status['track'] = (present = LastfmCollector.collect(*lastfm_credentials)) if present
   status['tweet'] = TwitterCollector.collect(ENV['USERNAME'], *twitter_credentials)
   status['games'] = GameCollector.collect(ENV['STEAM_USER'], ENV['PSN_USER'], ENV['SC2_URL'])
   status['parkrun'] = (parkrun_data = ParkrunCollector.collect(ENV['PARKRUN_BARCODE'])) ? parkrun_data : status['parkrun']
@@ -77,6 +77,8 @@ begin
   client = AwsClient.new(ENV['AWS_KEY'], ENV['AWS_SECRET'], ENV['AWS_REGION'])
   client.post(ENV['AWS_BUCKET'], 'status.json', status.to_json)
 rescue Exception => e
-  Rollbar.error(e)
+  unless e.inspect.match(/ReadTimeout|503|Over capacity|ServerError|buffer error|Server Error|timed out/)
+    Rollbar.error(e)
+  end
   raise e
 end
