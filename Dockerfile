@@ -2,10 +2,11 @@ FROM ruby
 
 WORKDIR /app
 
+# App
 COPY Gemfile Gemfile.lock ./
 RUN gem install bundler
 RUN bundle install
 
-ADD . /app
+COPY . /app
 
-CMD ruby status.rb
+CMD ["bash", "-e", "entrypoint.sh"]
