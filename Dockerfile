@@ -9,4 +9,4 @@ RUN bundle install
 
 COPY . /app
 
-CMD ["bash", "-e", "entrypoint.sh"]
+CMD ruby status.rb
