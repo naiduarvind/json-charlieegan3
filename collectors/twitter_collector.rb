@@ -3,11 +3,11 @@ class TwitterCollector
     client = initialize_client(key, secret, token_key, token_secret)
 
     tweet = client.user_timeline(username).reject do |t|
-      t.reply? || t.retweet? || t.media? || t.uris? || t.user_mentions?
+      t.reply? || t.retweet?
     end.first
 
     {
-      'text' => tweet.text,
+      'text' => Twitter::Autolink.auto_link(tweet.full_text),
       'location' => tweet.place.full_name.to_s,
       'link' => tweet.url.to_s,
       'created_at' => Time.parse(tweet.created_at.to_s).utc
