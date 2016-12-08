@@ -21,7 +21,7 @@ class GameCollector
   end
 
   def self.psn_latest(psn_username)
-    doc = Nokogiri::HTML(open("http://psnprofiles.com/#{psn_username}"))
+    doc = Nokogiri::HTML(open("https://psnprofiles.com/#{psn_username}"))
     thing = {
       network_icon: "https://www.playstation.com/favicon.ico",
       action: "https://my.playstation.com/#{psn_username}",
