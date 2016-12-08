@@ -36,7 +36,7 @@ def most_recent_location(status)
 end
 
 Rollbar.configure do |config|
-    config.access_token = ENV['ROLLBAR_TOKEN']
+  config.access_token = ENV['ROLLBAR_TOKEN']
 end
 
 begin
@@ -78,7 +78,7 @@ begin
   client = AwsClient.new(ENV['AWS_KEY'], ENV['AWS_SECRET'], ENV['AWS_REGION'])
   client.post(ENV['AWS_BUCKET'], 'status.json', status.to_json)
 rescue Exception => e
-  unless e.inspect.match(/ReadTimeout|503|Over capacity|ServerError|buffer error|Server Error|timed out/)
+  unless e.inspect.match(/ReadTimeout|503|Over capacity|ServerError|buffer error|Server Error|timed out|TimeTooSkewed/)
     Rollbar.error(e)
   end
   raise e
