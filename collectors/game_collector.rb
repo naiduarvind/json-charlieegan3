@@ -25,7 +25,7 @@ class GameCollector
     thing = {
       network_icon: "https://www.playstation.com/favicon.ico",
       action: "https://my.playstation.com/#{psn_username}",
-      game: doc.css('#gamesTable a.bold').first.text,
+      game: doc.css('#gamesTable a.title').first.text,
       time: nil
     }
   end
