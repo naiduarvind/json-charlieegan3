@@ -11,11 +11,5 @@ Fetches data from:
 * GitHub
 * Strava
 
-The task is currently hosted on [hyper.sh](https://hyper.sh) and updates this 
+The task is currently hosted on Heroku and updates this 
 [status file](https://s3.amazonaws.com/charlieegan3/status.json).
-
-Deployment:
-
-```bash
-hyper run --size=s2 -d --restart=on-failure --env-file ~/Desktop/json-charlieegan3.env charlieegan3/json-charlieegan3:master
-```
