@@ -2,11 +2,13 @@ class LastfmCollector
   def self.collect(key, secret, username)
     Rockstar.lastfm = { api_key: key, api_secret:  secret }
     track = Rockstar::User.new(username).recent_tracks.first
+
     raise unless track
+
     {
       'name' => track.name,
       'artist' => track.artist,
-      'link' => track.url,
+      'link' => track.url.gsub(/^.*https?:\/\//, "https://"), # come on...
       'image' => select_image(track.images),
       'created_at' => (track.date || Time.now).utc
     }

@@ -59,7 +59,7 @@ begin
   status['activity'] = StravaCollector.collect(ENV['STRAVA_TOKEN'])
   status['commit'] = GitHubCollector.collect(ENV['USERNAME'])
   status['image'] = InstagramCollector.collect(*instagram_credentials)
-  status['track'] = LastfmCollector.collect(*lastfm_credentials) rescue "skipping"
+  status['track'] = LastfmCollector.collect(*lastfm_credentials)
   status['tweet'] = TwitterCollector.collect(ENV['USERNAME'], *twitter_credentials)
   status['games'] = GameCollector.collect(ENV['STEAM_USER'], ENV['PSN_USER'], ENV['SC2_URL'])
   status['parkrun'] = (parkrun_data = ParkrunCollector.collect(ENV['PARKRUN_BARCODE'])) ? parkrun_data : status['parkrun']
