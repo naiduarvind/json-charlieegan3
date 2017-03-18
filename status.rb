@@ -72,7 +72,7 @@ begin
 
   status['metadata'] = {
     created_at: Time.new.utc,
-    most_recent_location: most_recent_location(status)
+    most_recent_location: most_recent_location({ tweet: status["tweet"], activity: status["activity"] })
   }
 
   client = AwsClient.new(ENV['AWS_KEY'], ENV['AWS_SECRET'], ENV['AWS_REGION'])
