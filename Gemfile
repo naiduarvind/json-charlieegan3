@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+ruby "2.3.3"
+
 gem 'aws-sdk', '~> 2'
 gem 'instagram'
 gem 'rockstar'
