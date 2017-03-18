@@ -1,8 +1,8 @@
 require 'json'
 require 'open-uri'
 
-require 'aws-sdk'
-require 'aws-sdk-resources'
+require "google/cloud/storage"
+
 require 'instagram'
 require 'rockstar'
 require 'strava/api/v3'
@@ -22,8 +22,6 @@ require './collectors/parkrun_collector'
 require './collectors/hn_collector'
 require './collectors/letterboxd_collector'
 
-require './aws_client'
-
 def ago_string(time)
   time.ago_in_words.gsub(/ and \w+ \w+/, '')
 end
@@ -40,7 +38,7 @@ Rollbar.configure do |config|
 end
 
 begin
-  status = JSON.parse(open(ENV['STATUS_URL']).read)
+  status = JSON.parse(open(ENV['STATUS_URL']).read) rescue {}
   status = Hash[status.map { |k, v|
     (v.class == Hash && v['created_at']) ? [k, v.merge('created_at' => Time.parse(v['created_at']))] : [k, v]
   }]
@@ -75,8 +73,15 @@ begin
     most_recent_location: most_recent_location({ tweet: status["tweet"], activity: status["activity"] })
   }
 
-  client = AwsClient.new(ENV['AWS_KEY'], ENV['AWS_SECRET'], ENV['AWS_REGION'])
-  client.post(ENV['AWS_BUCKET'], 'status.json', status.to_json)
+  File.write("status.json", status.to_json + "\n")
+
+  File.write("google_key.json", ENV["GCP_KEY_JSON"])
+  storage = Google::Cloud::Storage.new(
+    project: ENV["GCP_PROJECT"], keyfile: "google_key.json")
+  bucket = storage.bucket ENV["GCP_BUCKET"]
+  status_file = bucket.create_file "status.json"
+  status_file.acl.public!
+
 rescue Exception => e
   unless e.inspect.match(/ReadTimeout|503|Over capacity|ServerError|buffer error|Server Error|timed out|TimeTooSkewed/)
     Rollbar.error(e)

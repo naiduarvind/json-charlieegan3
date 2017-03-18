@@ -1,7 +1,7 @@
 # json-charlieegan3
 
 A rake task to keep the live content on 
-[charlieegan3.com](http://charlieegan3.com) up-to-date.
+[charlieegan3.com](https://charlieegan3.com) up-to-date.
 
 Fetches data from:
 
@@ -12,4 +12,4 @@ Fetches data from:
 * Strava
 
 The task is currently hosted on Heroku and updates this 
-[status file](https://s3.amazonaws.com/charlieegan3/status.json).
+[status file](https://storage.googleapis.com/json-charlieegan3/status.json).
