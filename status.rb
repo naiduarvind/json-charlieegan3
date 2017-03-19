@@ -79,8 +79,9 @@ begin
   storage = Google::Cloud::Storage.new(
     project: ENV["GCP_PROJECT"], keyfile: "google_key.json")
   bucket = storage.bucket ENV["GCP_BUCKET"]
-  status_file = bucket.create_file "status.json"
+  status_file = bucket.create_file "status.json", cache_control: "public, max-age=60"
   status_file.acl.public!
+
 
 rescue Exception => e
   unless e.inspect.match(/ReadTimeout|503|Over capacity|ServerError|buffer error|Server Error|timed out|TimeTooSkewed/)
