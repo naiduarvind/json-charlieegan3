@@ -68,6 +68,10 @@ begin
     (v.class == Hash && v['created_at']) ? [k, v.merge('created_ago' => ago_string(v['created_at']))] : [k, v]
   }]
 
+  status = Hash[status.map { |k, v|
+    (v.class == Hash && v['created_at']) ? [k, v.merge('created_at' => v['created_at'].rfc2822)] : [k, v]
+  }]
+
   status['metadata'] = {
     created_at: Time.new.utc,
     most_recent_location: most_recent_location({ tweet: status["tweet"], activity: status["activity"] })
