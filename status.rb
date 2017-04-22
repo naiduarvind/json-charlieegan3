@@ -55,7 +55,7 @@ begin
   lastfm_credentials = [ENV['LASTFM_KEY'], ENV['LASTFM_SECRET'], ENV['USERNAME']]
 
   status['activity'] = StravaCollector.collect(ENV['STRAVA_TOKEN'])
-  status['commit'] = GitHubCollector.collect(ENV['USERNAME'])
+  status['commit'] = GitHubCollector.collect(ENV['USERNAME']) rescue status["commit"]
   status['image'] = InstagramCollector.collect(*instagram_credentials)
   status['track'] = LastfmCollector.collect(*lastfm_credentials)
   status['tweet'] = TwitterCollector.collect(ENV['USERNAME'], *twitter_credentials)
