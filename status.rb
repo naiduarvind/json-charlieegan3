@@ -27,10 +27,13 @@ def ago_string(time)
 end
 
 def most_recent_location(status)
-  status.map { |_,v| [v['created_at'], v['location']] if !(v.class == Array) && v['location'] }.
+  location = status.map { |_,v| [v['created_at'], v['location']] if !(v.class == Array) && v['location'] }.
     compact.
     sort_by(&:first).
-    last.last
+    last.
+    last
+rescue
+  nil
 end
 
 Rollbar.configure do |config|
@@ -73,7 +76,7 @@ begin
   }]
 
   status['metadata'] = {
-    created_at: Time.new.utc,
+    created_at: Time.new.utc.rfc2822,
     most_recent_location: most_recent_location({ tweet: status["tweet"], activity: status["activity"] })
   }
 
