@@ -23,7 +23,15 @@ require './collectors/hn_collector'
 require './collectors/letterboxd_collector'
 
 def ago_string(time)
-  time.ago_in_words.gsub(/ and \w+ \w+/, '')
+  time.ago_in_words
+    .gsub(/ and.*/, "")
+    .gsub(/ ago/, "")
+    .gsub(/ seconds?/, "m")
+    .gsub(/ minutes?/, "m")
+    .gsub(/ months?/, "m")
+    .gsub(/ hours?/, "h")
+    .gsub(/ days?/, "d")
+    .strip + " ago"
 end
 
 def most_recent_location(status)
