@@ -2,8 +2,7 @@ source 'https://rubygems.org'
 
 ruby "2.3.3"
 
-gem 'google-cloud'
-
+gem 'aws-sdk', '~> 2'
 gem 'instagram'
 gem 'rockstar'
 gem 'strava-api-v3', '~> 0.6.0'
