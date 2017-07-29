@@ -90,8 +90,9 @@ begin
     most_recent_location: most_recent_location({ tweet: status["tweet"], activity: status["activity"] })
   }
 
-  client = AwsClient.new(ENV['AWS_KEY'], ENV['AWS_SECRET'], ENV['AWS_REGION'])
+  client = AwsClient.new(ENV['AWS_ACCESS_KEY_ID'], ENV['AWS_SECRET_ACCESS_KEY'], ENV['AWS_REGION'], ENV["AWS_DISTRIBUTION"])
   client.post(ENV['AWS_BUCKET'], 'status.json', status.to_json)
+  client.invalidate("/status.json")
 rescue Exception => e
   unless e.inspect.match(/ReadTimeout|503|Over capacity|ServerError|buffer error|Server Error|timed out|TimeTooSkewed/)
     Rollbar.error(e)
