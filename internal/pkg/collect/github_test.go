@@ -1,4 +1,4 @@
-package collect_test
+package collect
 
 import (
 	"fmt"
@@ -6,8 +6,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-
-	"github.com/charlieegan3/json-charlieegan3/internal/pkg/collect"
 )
 
 func TestGitHub(t *testing.T) {
@@ -19,7 +17,7 @@ func TestGitHub(t *testing.T) {
 		fmt.Fprint(w, string(content))
 	}))
 
-	result, err := collect.GitHub(localServer.URL, "charlieegan3")
+	result, err := GitHub(localServer.URL, "charlieegan3")
 
 	if err != nil {
 		t.Error(err)
