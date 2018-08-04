@@ -72,7 +72,6 @@ func Instagram(host string, username string) (LatestPost, error) {
 	if err != nil {
 		return LatestPost{}, errors.Wrap(err, "profile page json parsing failed")
 	}
-	fmt.Printf("%+v\n", profilePageData)
 	if len(profilePageData.EntryData.ProfilePage) == 0 || len(profilePageData.EntryData.ProfilePage[0].Graphql.User.EdgeOwnerToTimelineMedia.Edges) == 0 {
 		return LatestPost{}, errors.New("profile page json invalid")
 	}
@@ -119,7 +118,6 @@ func parsePageJSON(body []byte, data interface{}) error {
 	if len(matches) != 2 {
 		return errors.New("unable to extract shared data from dom")
 	}
-	fmt.Println(string(matches[1]))
 
 	err := json.Unmarshal(matches[1], data)
 	if err != nil {

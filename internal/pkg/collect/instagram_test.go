@@ -11,7 +11,6 @@ import (
 
 func TestInstagram(t *testing.T) {
 	localServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println(r.URL.Path)
 		var content []byte
 		var err error
 		if strings.Contains(r.URL.Path, "/p/") {
