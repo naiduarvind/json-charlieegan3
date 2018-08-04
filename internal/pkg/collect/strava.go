@@ -11,6 +11,7 @@ import (
 
 type activity struct {
 	AverageHeartrate float64 `json:"average_heartrate"`
+	ID               int64   `json:"id"`
 	Distance         float64 `json:"distance"`
 	MovingTime       int64   `json:"moving_time"`
 	Name             string  `json:"name"`
@@ -21,6 +22,7 @@ type activity struct {
 // LatestActivity wraps deta about the latest activity
 type LatestActivity struct {
 	AverageHeartrate float64   `json:"average_heartrate"`
+	URL              string    `json:"url"`
 	Distance         float64   `json:"distance"`
 	MovingTime       int64     `json:"moving_time"`
 	Name             string    `json:"name"`
@@ -60,5 +62,6 @@ func Strava(host string) (LatestActivity, error) {
 		Name:             activity.Name,
 		Type:             activity.Type,
 		CreatedAt:        createdAt,
+		URL:              fmt.Sprintf("https://www.strava.com/activities/%d", activity.ID),
 	}, nil
 }

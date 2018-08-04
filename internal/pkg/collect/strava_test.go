@@ -38,4 +38,7 @@ func TestStrava(t *testing.T) {
 	if result.Type != "Run" {
 		t.Error(result)
 	}
+	if result.URL != "https://www.strava.com/activities/1748439744" {
+		t.Error(result)
+	}
 }
