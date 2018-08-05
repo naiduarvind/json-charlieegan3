@@ -53,48 +53,48 @@ type LatestPost struct {
 	Type      string    `json:"type"`
 }
 
-// Instagram returns latest post for a given user
-func Instagram(host string, username string) (LatestPost, error) {
+// Collect returns latest post for a given user
+func (l *LatestPost) Collect(host string, username string) error {
 	resp, err := http.Get(fmt.Sprintf("%s/%s", host, username))
 
 	if err != nil {
-		return LatestPost{}, errors.Wrap(err, "get profile page failed")
+		return errors.Wrap(err, "get profile page failed")
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return LatestPost{}, errors.Wrap(err, "profile page body read failed")
+		return errors.Wrap(err, "profile page body read failed")
 	}
 
 	var profilePageData profilePage
 	err = parsePageJSON(body, &profilePageData)
 	if err != nil {
-		return LatestPost{}, errors.Wrap(err, "profile page json parsing failed")
+		return errors.Wrap(err, "profile page json parsing failed")
 	}
 	if len(profilePageData.EntryData.ProfilePage) == 0 || len(profilePageData.EntryData.ProfilePage[0].Graphql.User.EdgeOwnerToTimelineMedia.Edges) == 0 {
-		return LatestPost{}, errors.New("profile page json invalid")
+		return errors.New("profile page json invalid")
 	}
 	shortcode := profilePageData.EntryData.ProfilePage[0].Graphql.User.EdgeOwnerToTimelineMedia.Edges[0].Node.Shortcode
 
 	postURL := fmt.Sprintf("%s/p/%s", host, shortcode)
 	resp, err = http.Get(postURL)
 	if err != nil {
-		return LatestPost{}, errors.Wrap(err, "get post page failed")
+		return errors.Wrap(err, "get post page failed")
 	}
 
 	body, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return LatestPost{}, errors.Wrap(err, "post page body read failed")
+		return errors.Wrap(err, "post page body read failed")
 	}
 
 	var postPageData postPage
 	err = parsePageJSON(body, &postPageData)
 	if err != nil {
-		return LatestPost{}, errors.Wrap(err, "post page json parsing failed")
+		return errors.Wrap(err, "post page json parsing failed")
 	}
 	if len(postPageData.EntryData.PostPage) == 0 {
-		return LatestPost{}, errors.New("post page json invalid")
+		return errors.New("post page json invalid")
 	}
 
 	post := postPageData.EntryData.PostPage[0].Graphql.ShortcodeMedia
@@ -104,12 +104,12 @@ func Instagram(host string, username string) (LatestPost, error) {
 	}
 	createdAt := time.Unix(post.TakenAtTimestamp, 0)
 
-	return LatestPost{
-		Location:  post.Location.Name,
-		Type:      postType,
-		URL:       postURL,
-		CreatedAt: createdAt,
-	}, nil
+	l.Location = post.Location.Name
+	l.Type = postType
+	l.URL = postURL
+	l.CreatedAt = createdAt
+
+	return nil
 }
 
 func parsePageJSON(body []byte, data interface{}) error {

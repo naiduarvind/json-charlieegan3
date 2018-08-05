@@ -30,11 +30,11 @@ type LatestActivity struct {
 	Type             string    `json:"type"`
 }
 
-// Strava returns details about the most recent strava activity
-func Strava(host string) (LatestActivity, error) {
+// Collect returns details about the most recent strava activity
+func (l *LatestActivity) Collect(host string) error {
 	resp, err := http.Get(fmt.Sprintf("%s/api/v3/athlete/activities", host))
 	if err != nil {
-		return LatestActivity{}, errors.Wrap(err, "get activities failed")
+		return errors.Wrap(err, "get activities failed")
 	}
 
 	defer resp.Body.Close()
@@ -42,26 +42,26 @@ func Strava(host string) (LatestActivity, error) {
 	var activities []activity
 	err = json.NewDecoder(resp.Body).Decode(&activities)
 	if err != nil {
-		return LatestActivity{}, errors.Wrap(err, "body unmarshal failed")
+		return errors.Wrap(err, "body unmarshal failed")
 	}
 
 	if len(activities) == 0 {
-		return LatestActivity{}, errors.New("no activities found")
+		return errors.New("no activities found")
 	}
 
 	activity := activities[0]
 	createdAt, err := time.Parse(time.RFC3339, activity.StartDate)
 	if err != nil {
-		return LatestActivity{}, errors.Wrap(err, "latest activity time parsing failed")
+		return errors.Wrap(err, "latest activity time parsing failed")
 	}
 
-	return LatestActivity{
-		AverageHeartrate: activity.AverageHeartrate,
-		Distance:         activity.Distance,
-		MovingTime:       activity.MovingTime,
-		Name:             activity.Name,
-		Type:             activity.Type,
-		CreatedAt:        createdAt,
-		URL:              fmt.Sprintf("https://www.strava.com/activities/%d", activity.ID),
-	}, nil
+	l.AverageHeartrate = activity.AverageHeartrate
+	l.Distance = activity.Distance
+	l.MovingTime = activity.MovingTime
+	l.Name = activity.Name
+	l.Type = activity.Type
+	l.CreatedAt = createdAt
+	l.URL = fmt.Sprintf("https://www.strava.com/activities/%d", activity.ID)
+
+	return nil
 }

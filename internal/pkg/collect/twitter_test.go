@@ -17,21 +17,22 @@ func TestTwitter(t *testing.T) {
 		fmt.Fprint(w, string(content))
 	}))
 
-	result, err := Twitter(localServer.URL, []string{"t", "t", "t", "t"})
+	var latestTweet LatestTweet
+	err := latestTweet.Collect(localServer.URL, []string{"t", "t", "t", "t"})
 	if err != nil {
 		t.Error(err)
 	}
 
-	if result.Text != "just another test" {
-		t.Error(result.Text)
+	if latestTweet.Text != "just another test" {
+		t.Error(latestTweet.Text)
 	}
-	if result.Link != "https://twitter.com/oauth_dancer/status/240558470661799936" {
-		t.Error(result.Link)
+	if latestTweet.Link != "https://twitter.com/oauth_dancer/status/240558470661799936" {
+		t.Error(latestTweet.Link)
 	}
-	if fmt.Sprintf("%v", result.CreatedAt) != "2012-08-28 21:16:23 +0000 +0000" {
-		t.Error(result.CreatedAt)
+	if fmt.Sprintf("%v", latestTweet.CreatedAt) != "2012-08-28 21:16:23 +0000 +0000" {
+		t.Error(latestTweet.CreatedAt)
 	}
-	if result.Location != "Berkeley" {
-		t.Error(result.Location)
+	if latestTweet.Location != "Berkeley" {
+		t.Error(latestTweet.Location)
 	}
 }

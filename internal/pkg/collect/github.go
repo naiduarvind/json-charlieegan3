@@ -37,11 +37,11 @@ type LatestCommit struct {
 	} `json:"repo"`
 }
 
-// GitHub returns a user's latest commit and project
-func GitHub(host string, username string) (LatestCommit, error) {
+// Collect returns a user's latest commit and project
+func (l *LatestCommit) Collect(host string, username string) error {
 	resp, err := http.Get(fmt.Sprintf("%s/users/%s/events", host, username))
 	if err != nil {
-		return LatestCommit{}, errors.Wrap(err, "GitHub get failed")
+		return errors.Wrap(err, "GitHub get failed")
 	}
 
 	defer resp.Body.Close()
@@ -49,7 +49,7 @@ func GitHub(host string, username string) (LatestCommit, error) {
 	var events []event
 	err = json.NewDecoder(resp.Body).Decode(&events)
 	if err != nil {
-		return LatestCommit{}, errors.Wrap(err, "GitHub body unmarshal failed")
+		return errors.Wrap(err, "GitHub body unmarshal failed")
 	}
 
 	var pushes []event
@@ -61,19 +61,19 @@ func GitHub(host string, username string) (LatestCommit, error) {
 	}
 
 	if len(pushes) < 1 {
-		return LatestCommit{}, errors.New("GitHub response contained no pushes")
+		return errors.New("GitHub response contained no pushes")
 	}
 
 	latestPush := pushes[0]
 
 	createdAt, err := time.Parse(time.RFC3339, latestPush.CreatedAt)
 	if err != nil {
-		return LatestCommit{}, errors.Wrap(err, "GitHub latest event time parsing failed")
+		return errors.Wrap(err, "GitHub latest event time parsing failed")
 	}
 
-	return LatestCommit{
-		CreatedAt: createdAt,
-		Repo:      latestPush.Repo,
-		Commit:    latestPush.Payload.Commits[len(latestPush.Payload.Commits)-1],
-	}, nil
+	l.CreatedAt = createdAt
+	l.Repo = latestPush.Repo
+	l.Commit = latestPush.Payload.Commits[len(latestPush.Payload.Commits)-1]
+
+	return nil
 }

@@ -34,18 +34,18 @@ type LatestTrack struct {
 	CreatedAt   time.Time `json:"created_at"`
 }
 
-// LastFm returns the latest last fm track for a given user
+// Collect gets the latest last fm track for a given user
 // baseURL https://ws.audioscrobbler.com
-func LastFm(baseURL string, username string, apiKey string) (LatestTrack, error) {
+func (l *LatestTrack) Collect(baseURL string, username string, apiKey string) error {
 	resp, err := http.Get(fmt.Sprintf("%s/2.0/?method=user.getrecenttracks&user=%s&api_key=%s&format=json", baseURL, username, apiKey))
 	if err != nil {
-		return LatestTrack{}, errors.Wrap(err, "get recent tracks failed")
+		return errors.Wrap(err, "get recent tracks failed")
 	}
 
 	var data response
 	err = json.NewDecoder(resp.Body).Decode(&data)
 	if err != nil {
-		return LatestTrack{}, errors.Wrap(err, "body unmarshal failed")
+		return errors.Wrap(err, "body unmarshal failed")
 	}
 
 	track := data.Recenttracks.Track[0]
@@ -53,15 +53,14 @@ func LastFm(baseURL string, username string, apiKey string) (LatestTrack, error)
 	defer resp.Body.Close()
 	uts, err := strconv.ParseInt(track.Date.Uts, 10, 64)
 	if err != nil {
-		return LatestTrack{}, errors.Wrap(err, "failed to parse track unix timestamp")
+		return errors.Wrap(err, "failed to parse track unix timestamp")
 	}
-	createdAt := time.Unix(uts, 0)
 
-	return LatestTrack{
-		Link:        track.URL,
-		ProfileLink: fmt.Sprintf("%s/user/%s", baseURL, username),
-		Name:        track.Name,
-		Artist:      track.Artist.Text,
-		CreatedAt:   createdAt,
-	}, nil
+	l.Link = track.URL
+	l.ProfileLink = fmt.Sprintf("%s/user/%s", baseURL, username)
+	l.Name = track.Name
+	l.Artist = track.Artist.Text
+	l.CreatedAt = time.Unix(uts, 0)
+
+	return nil
 }

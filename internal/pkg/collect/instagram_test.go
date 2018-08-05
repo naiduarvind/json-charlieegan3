@@ -24,20 +24,21 @@ func TestInstagram(t *testing.T) {
 		fmt.Fprint(w, string(content))
 	}))
 
-	result, err := Instagram(localServer.URL, "charlieegan3")
+	var latestPost LatestPost
+	err := latestPost.Collect(localServer.URL, "charlieegan3")
 	if err != nil {
 		t.Error(err)
 	}
 
-	if result.Location != "Barbican Estate" {
-		t.Error(result)
+	if latestPost.Location != "Barbican Estate" {
+		t.Error(latestPost)
 	}
 
-	if strings.Contains(result.URL, "/p/BmCO0mAgC2h") == false {
-		t.Error(result)
+	if strings.Contains(latestPost.URL, "/p/BmCO0mAgC2h") == false {
+		t.Error(latestPost)
 	}
 
-	if result.Type != "photo" {
-		t.Error(result)
+	if latestPost.Type != "photo" {
+		t.Error(latestPost)
 	}
 }

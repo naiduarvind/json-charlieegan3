@@ -18,24 +18,25 @@ func TestLastFm(t *testing.T) {
 		fmt.Fprint(w, string(content))
 	}))
 
-	result, err := LastFm(localServer.URL, "charlieegan3", "KEY")
+	var latestTrack LatestTrack
+	err := latestTrack.Collect(localServer.URL, "charlieegan3", "KEY")
 	if err != nil {
 		t.Error(err)
 	}
 
-	if result.Name != "The Trip" {
-		t.Error(result.Name)
+	if latestTrack.Name != "The Trip" {
+		t.Error(latestTrack.Name)
 	}
-	if result.Link != "https://www.last.fm/music/Still+Corners/_/The+Trip" {
-		t.Error(result.Link)
+	if latestTrack.Link != "https://www.last.fm/music/Still+Corners/_/The+Trip" {
+		t.Error(latestTrack.Link)
 	}
-	if strings.Contains(result.ProfileLink, "/user/charlieegan3") == false {
-		t.Error(result.ProfileLink)
+	if strings.Contains(latestTrack.ProfileLink, "/user/charlieegan3") == false {
+		t.Error(latestTrack.ProfileLink)
 	}
-	if result.Artist != "Still Corners" {
-		t.Error(result.Artist)
+	if latestTrack.Artist != "Still Corners" {
+		t.Error(latestTrack.Artist)
 	}
-	if result.CreatedAt.String() != "2018-08-04 22:11:51 +0100 BST" {
-		t.Error(result.CreatedAt)
+	if latestTrack.CreatedAt.String() != "2018-08-04 22:11:51 +0100 BST" {
+		t.Error(latestTrack.CreatedAt)
 	}
 }

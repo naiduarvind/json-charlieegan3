@@ -17,28 +17,28 @@ func TestStrava(t *testing.T) {
 		fmt.Fprint(w, string(content))
 	}))
 
-	result, err := Strava(localServer.URL)
-
+	var latestActivity LatestActivity
+	err := latestActivity.Collect(localServer.URL)
 	if err != nil {
 		t.Error(err)
 	}
 
-	if result.Name != "Evaporate" {
-		t.Error(result)
+	if latestActivity.Name != "Evaporate" {
+		t.Error(latestActivity)
 	}
-	if result.Distance != 4231.5 {
-		t.Error(result)
+	if latestActivity.Distance != 4231.5 {
+		t.Error(latestActivity)
 	}
-	if result.MovingTime != 1470 {
-		t.Error(result)
+	if latestActivity.MovingTime != 1470 {
+		t.Error(latestActivity)
 	}
-	if result.AverageHeartrate != 142.9 {
-		t.Error(result)
+	if latestActivity.AverageHeartrate != 142.9 {
+		t.Error(latestActivity)
 	}
-	if result.Type != "Run" {
-		t.Error(result)
+	if latestActivity.Type != "Run" {
+		t.Error(latestActivity)
 	}
-	if result.URL != "https://www.strava.com/activities/1748439744" {
-		t.Error(result)
+	if latestActivity.URL != "https://www.strava.com/activities/1748439744" {
+		t.Error(latestActivity)
 	}
 }

@@ -17,15 +17,16 @@ func TestGitHub(t *testing.T) {
 		fmt.Fprint(w, string(content))
 	}))
 
-	result, err := GitHub(localServer.URL, "charlieegan3")
+	var latestCommit LatestCommit
+	err := latestCommit.Collect(localServer.URL, "charlieegan3")
 
 	if err != nil {
 		t.Error(err)
 	}
-	if result.Repo.Name != "charlieegan3/dotfiles" {
-		t.Error(result)
+	if latestCommit.Repo.Name != "charlieegan3/dotfiles" {
+		t.Error(latestCommit)
 	}
-	if result.Commit.Message != "Install rmagick and docker compose" {
-		t.Error(result)
+	if latestCommit.Commit.Message != "Install rmagick and docker compose" {
+		t.Error(latestCommit)
 	}
 }

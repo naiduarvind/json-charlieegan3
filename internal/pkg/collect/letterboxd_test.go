@@ -18,24 +18,25 @@ func TestLetterboxd(t *testing.T) {
 		fmt.Fprint(w, string(content))
 	}))
 
-	result, err := Letterboxd(localServer.URL, "charlieegan3")
+	var latestFilm LatestFilm
+	err := latestFilm.Collect(localServer.URL, "charlieegan3")
 	if err != nil {
 		t.Error(err)
 	}
 
-	if result.Title != "Ready Player One" {
-		t.Error(result)
+	if latestFilm.Title != "Ready Player One" {
+		t.Error(latestFilm)
 	}
-	if result.Year != "2018" {
-		t.Error(result)
+	if latestFilm.Year != "2018" {
+		t.Error(latestFilm)
 	}
-	if strings.Contains(fmt.Sprintf("%v", result.CreatedAt), "2018-07-13 11:08:29") == false {
-		t.Errorf("%v", result.CreatedAt)
+	if strings.Contains(fmt.Sprintf("%v", latestFilm.CreatedAt), "2018-07-13 11:08:29") == false {
+		t.Errorf("%v", latestFilm.CreatedAt)
 	}
-	if result.Rating != "★★★½" {
-		t.Error(result.Rating)
+	if latestFilm.Rating != "★★★½" {
+		t.Error(latestFilm.Rating)
 	}
-	if result.Link != "https://letterboxd.com/charlieegan3/film/ready-player-one/" {
-		t.Error(result.Link)
+	if latestFilm.Link != "https://letterboxd.com/charlieegan3/film/ready-player-one/" {
+		t.Error(latestFilm.Link)
 	}
 }

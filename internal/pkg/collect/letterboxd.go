@@ -41,11 +41,11 @@ type LatestFilm struct {
 	Year      string    `json:"year"`
 }
 
-// Letterboxd returns the latest film in user's activity
-func Letterboxd(host string, username string) (LatestFilm, error) {
+// Collect returns the latest film in user's activity
+func (l *LatestFilm) Collect(host string, username string) error {
 	resp, err := http.Get(fmt.Sprintf("%s/%s/rss", host, username))
 	if err != nil {
-		return LatestFilm{}, errors.Wrap(err, "get activities failed")
+		return errors.Wrap(err, "get activities failed")
 	}
 
 	defer resp.Body.Close()
@@ -53,26 +53,22 @@ func Letterboxd(host string, username string) (LatestFilm, error) {
 	var rss rssDocument
 	err = xml.NewDecoder(resp.Body).Decode(&rss)
 	if err != nil {
-		return LatestFilm{}, errors.Wrap(err, "body unmarshal failed")
+		return errors.Wrap(err, "body unmarshal failed")
 	}
 
 	r := regexp.MustCompile(`(.*), (\d{4}) - (\S*)`)
 	matches := r.FindSubmatch([]byte(rss.Channel.Item[0].Title.String))
 
-	title := string(matches[1])
-	year := string(matches[2])
-	rating := string(matches[3])
-
 	createdAt, err := time.Parse("Mon, 2 Jan 2006 15:04:05 -0700", rss.Channel.Item[0].PubDate.String)
 	if err != nil {
-		return LatestFilm{}, errors.Wrap(err, "failed to parse item date")
+		return errors.Wrap(err, "failed to parse item date")
 	}
 
-	return LatestFilm{
-		Title:     title,
-		Year:      year,
-		Rating:    rating,
-		CreatedAt: createdAt,
-		Link:      rss.Channel.Item[0].Link.String,
-	}, nil
+	l.Title = string(matches[1])
+	l.Year = string(matches[2])
+	l.Rating = string(matches[3])
+	l.CreatedAt = createdAt
+	l.Link = rss.Channel.Item[0].Link.String
+
+	return nil
 }
