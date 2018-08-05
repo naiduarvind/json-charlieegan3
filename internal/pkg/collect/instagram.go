@@ -34,8 +34,8 @@ type postPage struct {
 		PostPage []struct {
 			Graphql struct {
 				ShortcodeMedia struct {
-					IsVideo          bool `json:"is_video"`
-					TakenAtTimestamp int64
+					IsVideo          bool  `json:"is_video"`
+					TakenAtTimestamp int64 `json:"taken_at_timestamp"`
 					Location         struct {
 						Name string `json:"name"`
 					} `json:"location"`

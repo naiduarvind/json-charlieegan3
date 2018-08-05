@@ -41,4 +41,8 @@ func TestInstagram(t *testing.T) {
 	if latestPost.Type != "photo" {
 		t.Error(latestPost)
 	}
+
+	if fmt.Sprintf("%v", latestPost.CreatedAt) != "2018-08-04 00:17:13 +0100 BST" {
+		t.Error(latestPost.CreatedAt)
+	}
 }
