@@ -127,10 +127,19 @@ func upload(statusJSON string) error {
 
 	s3Service := s3manager.NewUploader(sess)
 
+	contentType := "application/json"
+	acl := "public-read"
+	expires := time.Now().UTC().Add(time.Minute * time.Duration(10))
+	cacheControl := "public, max-age=600"
+
 	_, err := s3Service.Upload(&s3manager.UploadInput{
-		Bucket: aws.String(os.Getenv("AWS_BUCKET")),
-		Key:    aws.String(os.Getenv("STATUS_KEY")),
-		Body:   strings.NewReader(statusJSON),
+		Bucket:       aws.String(os.Getenv("AWS_BUCKET")),
+		Key:          aws.String(os.Getenv("STATUS_KEY")),
+		ContentType:  &contentType,
+		ACL:          &acl,
+		Body:         strings.NewReader(statusJSON),
+		Expires:      &expires,
+		CacheControl: &cacheControl,
 	})
 	if err != nil {
 		return errors.Wrap(err, "s3 upload error")

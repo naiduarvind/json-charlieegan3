@@ -1,0 +1,20 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  namespace: json-charlieegan3
+  name: recurring-update
+spec:
+  successfulJobsHistoryLimit: 1
+  schedule: "*/10 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: status-updater
+            image: charlieegan3/json-charlieegan3:dea13f2c67dd14d1b081c0e8ad6b94e9
+            command: ["./statusUpdater"]
+            envFrom:
+            - configMapRef:
+                name: json-charlieegan3-config
