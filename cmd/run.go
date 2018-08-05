@@ -147,7 +147,7 @@ func upload(statusJSON string) error {
 
 	cloudfrontService := cloudfront.New(sess)
 	distribution := os.Getenv("AWS_DISTRIBUTION")
-	callerReference := "json-charlieegan3-go"
+	callerReference := "json-charlieegan3-go" + time.Now().Format("2006-01-02-150405")
 	path := fmt.Sprintf("/%s", statusKey)
 	pathQuantity := int64(1)
 
