@@ -34,11 +34,12 @@ type rssDocument struct {
 
 // LatestFilm contains the wanted information for the latest film
 type LatestFilm struct {
-	Title     string    `json:"title"`
-	CreatedAt time.Time `json:"created_at"`
-	Link      string    `json:"link"`
-	Rating    string    `json:"rating"`
-	Year      string    `json:"year"`
+	Title           string    `json:"title"`
+	Link            string    `json:"link"`
+	Rating          string    `json:"rating"`
+	Year            string    `json:"year"`
+	CreatedAt       time.Time `json:"created_at"`
+	CreatedAtString string    `json:"created_at_string"`
 }
 
 // Collect returns the latest film in user's activity

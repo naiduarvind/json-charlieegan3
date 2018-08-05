@@ -47,10 +47,11 @@ type postPage struct {
 
 // LatestPo stores the URL, location and time of the latest post, video or photo
 type LatestPost struct {
-	URL       string    `json:"url"`
-	Location  string    `json:"location"`
-	CreatedAt time.Time `json:"created_at"`
-	Type      string    `json:"type"`
+	URL             string    `json:"url"`
+	Location        string    `json:"location"`
+	Type            string    `json:"type"`
+	CreatedAt       time.Time `json:"created_at"`
+	CreatedAtString string    `json:"created_at_string"`
 }
 
 // Collect returns latest post for a given user

@@ -27,11 +27,12 @@ type response struct {
 
 // LatestTrack wraps the data for the most recent lastfm track
 type LatestTrack struct {
-	Link        string    `json:"link"`
-	ProfileLink string    `json:"profile"`
-	Name        string    `json:"name"`
-	Artist      string    `json:"artist"`
-	CreatedAt   time.Time `json:"created_at"`
+	Link            string    `json:"link"`
+	ProfileLink     string    `json:"profile"`
+	Name            string    `json:"name"`
+	Artist          string    `json:"artist"`
+	CreatedAt       time.Time `json:"created_at"`
+	CreatedAtString string    `json:"created_at_string"`
 }
 
 // Collect gets the latest last fm track for a given user

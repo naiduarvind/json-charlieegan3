@@ -26,8 +26,9 @@ type LatestActivity struct {
 	Distance         float64   `json:"distance"`
 	MovingTime       int64     `json:"moving_time"`
 	Name             string    `json:"name"`
-	CreatedAt        time.Time `json:"created_at"`
 	Type             string    `json:"type"`
+	CreatedAt        time.Time `json:"created_at"`
+	CreatedAtString  string    `json:"created_at_string"`
 }
 
 // Collect returns details about the most recent strava activity

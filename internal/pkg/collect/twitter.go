@@ -10,10 +10,11 @@ import (
 
 // LatestTweet wraps the required data for a tweet
 type LatestTweet struct {
-	Text      string    `json:"text"`
-	Link      string    `json:"link"`
-	Location  string    `json:"location"`
-	CreatedAt time.Time `json:"created_at"`
+	Text            string    `json:"text"`
+	Link            string    `json:"link"`
+	Location        string    `json:"location"`
+	CreatedAt       time.Time `json:"created_at"`
+	CreatedAtString string    `json:"created_at_string"`
 }
 
 // Collect returns the latest tweet for the requesting user

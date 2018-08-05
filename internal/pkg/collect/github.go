@@ -26,13 +26,14 @@ type event struct {
 
 // LatestCommit stores the message, time and repo of the user's latest commit
 type LatestCommit struct {
-	CreatedAt time.Time `json:"created_at"`
-	Message   string    `json:"message"`
-	URL       string    `json:"url"`
-	Repo      struct {
+	Message string `json:"message"`
+	URL     string `json:"url"`
+	Repo    struct {
 		Name string `json:"name"`
 		URL  string `json:"url"`
 	} `json:"repo"`
+	CreatedAt       time.Time `json:"created_at"`
+	CreatedAtString string    `json:"created_at_string"`
 }
 
 // Collect returns a user's latest commit and project
