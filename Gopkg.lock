@@ -14,10 +14,57 @@
   revision = "c5a927568de7aad8a58127d80bcd36ca4e71e454"
 
 [[projects]]
+  name = "github.com/aws/aws-sdk-go"
+  packages = [
+    "aws",
+    "aws/awserr",
+    "aws/awsutil",
+    "aws/client",
+    "aws/client/metadata",
+    "aws/corehandlers",
+    "aws/credentials",
+    "aws/credentials/ec2rolecreds",
+    "aws/credentials/endpointcreds",
+    "aws/credentials/stscreds",
+    "aws/csm",
+    "aws/defaults",
+    "aws/ec2metadata",
+    "aws/endpoints",
+    "aws/request",
+    "aws/session",
+    "aws/signer/v4",
+    "internal/sdkio",
+    "internal/sdkrand",
+    "internal/sdkuri",
+    "internal/shareddefaults",
+    "private/protocol",
+    "private/protocol/eventstream",
+    "private/protocol/eventstream/eventstreamapi",
+    "private/protocol/query",
+    "private/protocol/query/queryutil",
+    "private/protocol/rest",
+    "private/protocol/restxml",
+    "private/protocol/xml/xmlutil",
+    "service/cloudfront",
+    "service/s3",
+    "service/s3/s3iface",
+    "service/s3/s3manager",
+    "service/sts"
+  ]
+  revision = "f70339bb6af843c8ab1974381b3f4fcaee2b1a41"
+  version = "v1.15.5"
+
+[[projects]]
   branch = "master"
   name = "github.com/azr/backoff"
   packages = ["."]
   revision = "53511d3c733003985b0b76f733df1f4d0095ee6a"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/dustin/go-humanize"
+  packages = ["."]
+  revision = "9f541cc9db5d55bce703bd99987c9d5cb8eea45e"
 
 [[projects]]
   branch = "master"
@@ -38,6 +85,17 @@
   revision = "bca2e7f09a178fd36b034107a00e2323bca6a82e"
 
 [[projects]]
+  name = "github.com/go-ini/ini"
+  packages = ["."]
+  revision = "358ee7663966325963d4e8b2e1fbd570c5195153"
+  version = "v1.38.1"
+
+[[projects]]
+  name = "github.com/jmespath/go-jmespath"
+  packages = ["."]
+  revision = "0b12d6b5"
+
+[[projects]]
   name = "github.com/pkg/errors"
   packages = ["."]
   revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
@@ -52,6 +110,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "3da2f3ddf43341b6b20806d4e1fe313ea19fdfb196b0173cdd42725ecf763e36"
+  inputs-digest = "56751b66900539e3f043754339c6af9ca8741b91d94721c72d91693ed038b780"
   solver-name = "gps-cdcl"
   solver-version = 1

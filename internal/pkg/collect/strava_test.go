@@ -18,7 +18,7 @@ func TestStrava(t *testing.T) {
 	}))
 
 	var latestActivity LatestActivity
-	err := latestActivity.Collect(localServer.URL)
+	err := latestActivity.Collect(localServer.URL, "test_token")
 	if err != nil {
 		t.Error(err)
 	}

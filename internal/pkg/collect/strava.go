@@ -31,8 +31,15 @@ type LatestActivity struct {
 }
 
 // Collect returns details about the most recent strava activity
-func (l *LatestActivity) Collect(host string) error {
-	resp, err := http.Get(fmt.Sprintf("%s/api/v3/athlete/activities", host))
+// host https://www.strava.com
+func (l *LatestActivity) Collect(host string, token string) error {
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/api/v3/athlete/activities", host), nil)
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %v", token))
+	if err != nil {
+		return errors.Wrap(err, "build request failed")
+	}
+	resp, err := client.Do(req)
 	if err != nil {
 		return errors.Wrap(err, "get activities failed")
 	}

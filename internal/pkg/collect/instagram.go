@@ -54,6 +54,7 @@ type LatestPost struct {
 }
 
 // Collect returns latest post for a given user
+// host: https://instagram.com
 func (l *LatestPost) Collect(host string, username string) error {
 	resp, err := http.Get(fmt.Sprintf("%s/%s", host, username))
 

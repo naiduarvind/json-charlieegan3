@@ -42,6 +42,7 @@ type LatestFilm struct {
 }
 
 // Collect returns the latest film in user's activity
+// host: https://letterboxd.com
 func (l *LatestFilm) Collect(host string, username string) error {
 	resp, err := http.Get(fmt.Sprintf("%s/%s/rss", host, username))
 	if err != nil {

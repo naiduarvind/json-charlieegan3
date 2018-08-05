@@ -24,7 +24,7 @@ func (l *LatestTweet) Collect(baseURL string, credentials []string) error {
 
 	params := url.Values{}
 	params.Set("include_entities", "false")
-	data, err := api.GetHomeTimeline(params)
+	data, err := api.GetUserTimeline(params)
 	if err != nil {
 		return err
 	}

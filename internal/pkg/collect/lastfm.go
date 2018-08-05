@@ -41,6 +41,7 @@ func (l *LatestTrack) Collect(baseURL string, username string, apiKey string) er
 	if err != nil {
 		return errors.Wrap(err, "get recent tracks failed")
 	}
+	defer resp.Body.Close()
 
 	var data response
 	err = json.NewDecoder(resp.Body).Decode(&data)
@@ -50,7 +51,9 @@ func (l *LatestTrack) Collect(baseURL string, username string, apiKey string) er
 
 	track := data.Recenttracks.Track[0]
 
-	defer resp.Body.Close()
+	if track.Date.Uts == "" {
+		track.Date.Uts = fmt.Sprintf("%d", time.Now().Unix())
+	}
 	uts, err := strconv.ParseInt(track.Date.Uts, 10, 64)
 	if err != nil {
 		return errors.Wrap(err, "failed to parse track unix timestamp")

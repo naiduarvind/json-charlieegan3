@@ -27,11 +27,9 @@ type event struct {
 // LatestCommit stores the message, time and repo of the user's latest commit
 type LatestCommit struct {
 	CreatedAt time.Time `json:"created_at"`
-	Commit    struct {
-		Message string `json:"message"`
-		URL     string `json:"url"`
-	} `json:"commit"`
-	Repo struct {
+	Message   string    `json:"message"`
+	URL       string    `json:"url"`
+	Repo      struct {
 		Name string `json:"name"`
 		URL  string `json:"url"`
 	} `json:"repo"`
@@ -73,7 +71,9 @@ func (l *LatestCommit) Collect(host string, username string) error {
 
 	l.CreatedAt = createdAt
 	l.Repo = latestPush.Repo
-	l.Commit = latestPush.Payload.Commits[len(latestPush.Payload.Commits)-1]
+	commit := latestPush.Payload.Commits[len(latestPush.Payload.Commits)-1]
+	l.URL = commit.URL
+	l.Message = commit.Message
 
 	return nil
 }

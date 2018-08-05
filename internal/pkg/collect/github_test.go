@@ -26,7 +26,7 @@ func TestGitHub(t *testing.T) {
 	if latestCommit.Repo.Name != "charlieegan3/dotfiles" {
 		t.Error(latestCommit)
 	}
-	if latestCommit.Commit.Message != "Install rmagick and docker compose" {
+	if latestCommit.Message != "Install rmagick and docker compose" {
 		t.Error(latestCommit)
 	}
 }
