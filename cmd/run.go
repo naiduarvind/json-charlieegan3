@@ -12,7 +12,6 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/cloudfront"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	humanize "github.com/dustin/go-humanize"
 
@@ -134,7 +133,7 @@ func upload(statusJSON string) error {
 
 	_, err := s3Service.Upload(&s3manager.UploadInput{
 		Bucket:       aws.String(os.Getenv("AWS_BUCKET")),
-		Key:          aws.String(os.Getenv("STATUS_KEY")),
+		Key:          aws.String(statusKey),
 		ContentType:  &contentType,
 		ACL:          &acl,
 		Body:         strings.NewReader(statusJSON),
@@ -145,29 +144,29 @@ func upload(statusJSON string) error {
 		return errors.Wrap(err, "s3 upload error")
 	}
 
-	cloudfrontService := cloudfront.New(sess)
-	distribution := os.Getenv("AWS_DISTRIBUTION")
-	callerReference := "json-charlieegan3-go" + time.Now().Format("2006-01-02-150405")
-	path := fmt.Sprintf("/%s", statusKey)
-	pathQuantity := int64(1)
-
-	input := &cloudfront.CreateInvalidationInput{
-		DistributionId: &distribution,
-		InvalidationBatch: &cloudfront.InvalidationBatch{
-			CallerReference: &callerReference,
-			Paths: &cloudfront.Paths{
-				Items: []*string{
-					&path,
-				},
-				Quantity: &pathQuantity,
-			},
-		},
-	}
-
-	_, err = cloudfrontService.CreateInvalidation(input)
-	if err != nil {
-		return errors.Wrap(err, "cloudfront invalidation error")
-	}
+	// cloudfrontService := cloudfront.New(sess)
+	// distribution := os.Getenv("AWS_DISTRIBUTION")
+	// callerReference := "json-charlieegan3-go" + time.Now().Format("2006-01-02-150405")
+	// path := fmt.Sprintf("/%s", statusKey)
+	// pathQuantity := int64(1)
+	//
+	// input := &cloudfront.CreateInvalidationInput{
+	// 	DistributionId: &distribution,
+	// 	InvalidationBatch: &cloudfront.InvalidationBatch{
+	// 		CallerReference: &callerReference,
+	// 		Paths: &cloudfront.Paths{
+	// 			Items: []*string{
+	// 				&path,
+	// 			},
+	// 			Quantity: &pathQuantity,
+	// 		},
+	// 	},
+	// }
+	//
+	// _, err = cloudfrontService.CreateInvalidation(input)
+	// if err != nil {
+	// 	return errors.Wrap(err, "cloudfront invalidation error")
+	// }
 
 	return nil
 }

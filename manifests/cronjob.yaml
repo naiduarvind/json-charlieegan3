@@ -13,7 +13,7 @@ spec:
           restartPolicy: Never
           containers:
           - name: status-updater
-            image: charlieegan3/json-charlieegan3:b8cb91c7519f2172d67987e5d47c25cd
+            image: charlieegan3/json-charlieegan3:28aaf024fdb0637c9df21571b0880ade
             command: ["./statusUpdater"]
             envFrom:
             - configMapRef:
